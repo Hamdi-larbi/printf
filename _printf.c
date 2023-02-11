@@ -36,25 +36,25 @@ int _printf(const char *format, ...)
 				ptr = va_arg(args, char*);
 				if (ptr == NULL)
 				{
-		      			ptr = "(null)";
+					ptr = "(null)";
 				}
-		    		for (length = 0; ptr[length]; length++)
+				for (length = 0; ptr[length]; length++)
 				{
-	      				;
+					;
 				}
 				count += write(1, ptr, length);
 			}
 			else if (format[i] == '%')
 				count += write(1, &format[i], 1);
 			else if (format[i] == '\0')
-				return(-1);
+				return (-1);
 			else if (format[i] == 'd' || format[i] == 'i')
 			{
 				num = va_arg(args, int);
 				k = num;
 				len = 0;
 				while (k >= 1)
-				{				
+				{
 					len++;
 					k /= 10;
 				}
