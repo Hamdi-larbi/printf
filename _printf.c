@@ -15,7 +15,7 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	int num, count = 0;
-	int i, j, k, length, len, l;
+	int i, j, k, length, len;
 	char c, *p, *ptr, *digit, *dig;
 
 	va_start(args, format);
@@ -26,59 +26,51 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			i++;
-			switch (format[i])
+			if (format[i] = 'c')
 			{
-				case 'c':
+				c = va_arg(args, int);
+				count += write(1, &c, 1);
+			}
+			if (format[i] = 's')
+			{
+				length = 0;
+				ptr = va_arg(args, char*);
+				while (*ptr != '\0')
 				{
-					c = va_arg(args, int);
-					count += write(1, &c, 1);
-					break;
+					length++;
+					ptr++;
 				}
-				case 's':
+				p = malloc((length + 1) * sizeof(char));
+				for (j = 0; j < (length + 1); j++)
 				{
-					length = 0;
-					ptr = va_arg(args, char*);
-					while (*ptr != '\0')
-					{
-						length++;
-						ptr++;
-					}
-					p = malloc((length + 1) * sizeof(char));
-					for (j = 0; j < (length + 1); j++)
-					{
-						p[length - j] = *(ptr - j);
-					}
-					count += write(1, p, length);
-					free(p);
-					p = NULL;
-					break;
+					p[length - j] = *(ptr - j);
 				}
-				case '%':
-					count += write(1, &format[i], 1);
-					break;
-				case 'd':
-				case 'i':
+				count += write(1, p, length);
+				free(p);
+				p = NULL;
+			}
+			if (format[i] = '%')
+				count += write(1, &format[i], 1);
+			if (format[i] = 'd' || format[i] = 'i')
+			{
+				num = va_arg(args, int);
+				k = num;
+				len = 0;
+				while (k >= 1)
+				{				
+					len++;
+					k /= 10;
+				}
+				dig = malloc(len + 1);
+				dig[len] = '\0';
+				for (l = 1; l < len + 1; l++)
 				{
-					num = va_arg(args, int);
-					k = num;
-					len = 0;
-					while (k >= 1)
-					{				
-						len++;
-						k /= 10;
-					}
-					dig = malloc(len + 1);
-					dig[len] = '\0';
-					for (l = 1; l < len + 1; l++)
-					{
-						dig[len - l] = (num % 10) + '0';
-						num /= 10;
-					}
-					count += write(1, dig, len);
-					free(dig);
-					dig = NULL;
-					break;
+					dig[len - l] = (num % 10) + '0';
+					num /= 10;
 				}
+				count += write(1, dig, len);
+				free(dig);
+				dig = NULL;
 			}
 		}
 		else
