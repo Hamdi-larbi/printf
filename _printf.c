@@ -15,8 +15,8 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	int num, count = 0;
-	int i, j, k, length, len, l;
-	char c, *p, *ptr, *dig;
+	int i, k, length, len;
+	char c, *ptr, *dig;
 
 	va_start(args, format);
 	if (format == NULL)
@@ -33,21 +33,16 @@ int _printf(const char *format, ...)
 			}
 			if (format[i] == 's')
 			{
-				length = 0;
 				ptr = va_arg(args, char*);
-				while (*ptr != '\0')
+				if (ptr == NULL)
 				{
-					length++;
-					ptr++;
+		      			ptr = "(null)";
 				}
-				p = malloc((length + 1) * sizeof(char));
-				for (j = 0; j < (length + 1); j++)
+		    		for (length = 0; ptr[length]; length++)
 				{
-					p[length - j] = *(ptr - j);
+	      				;
 				}
-				count += write(1, p, length);
-				free(p);
-				p = NULL;
+				count += write(1, ptr, length);
 			}
 			if (format[i] == '%')
 				count += write(1, &format[i], 1);
