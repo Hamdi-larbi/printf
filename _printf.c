@@ -26,12 +26,12 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			i++;
-			if (format[i] = 'c')
+			if (format[i] == 'c')
 			{
 				c = va_arg(args, int);
 				count += write(1, &c, 1);
 			}
-			if (format[i] = 's')
+			if (format[i] == 's')
 			{
 				length = 0;
 				ptr = va_arg(args, char*);
@@ -49,9 +49,9 @@ int _printf(const char *format, ...)
 				free(p);
 				p = NULL;
 			}
-			if (format[i] = '%')
+			if (format[i] == '%')
 				count += write(1, &format[i], 1);
-			if (format[i] = 'd' || format[i] = 'i')
+			if (format[i] == 'd' || format[i] == 'i')
 			{
 				num = va_arg(args, int);
 				k = num;
