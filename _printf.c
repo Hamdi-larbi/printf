@@ -31,7 +31,7 @@ int _printf(const char *format, ...)
 				c = va_arg(args, int);
 				count += write(1, &c, 1);
 			}
-			if (format[i] == 's')
+			else if (format[i] == 's')
 			{
 				ptr = va_arg(args, char*);
 				if (ptr == NULL)
@@ -44,11 +44,11 @@ int _printf(const char *format, ...)
 				}
 				count += write(1, ptr, length);
 			}
-			if (format[i] == '%')
+			else if (format[i] == '%')
 				count += write(1, &format[i], 1);
-			if (format[i] == '\0')
+			else if (format[i] == '\0')
 				return(-1);
-			if (format[i] == 'd' || format[i] == 'i')
+			else if (format[i] == 'd' || format[i] == 'i')
 			{
 				num = va_arg(args, int);
 				k = num;
@@ -68,6 +68,11 @@ int _printf(const char *format, ...)
 				count += write(1, dig, len);
 				free(dig);
 				dig = NULL;
+			}
+			else
+			{
+				count += write(1, &format[i - 1], 1);
+				count += write(1, &format[i], 1);
 			}
 		}
 		else
