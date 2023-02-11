@@ -14,10 +14,9 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
-	int count = 0;
-	int i, j;
-	int length;
-	char c, *p, *ptr;
+	int num, count = 0;
+	int i, j, k, length, len;
+	char c, *p, *ptr, *digit, *dig;
 
 	va_start(args, format);
 	if (format == NULL)
@@ -27,40 +26,63 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			i++;
-			if (format[i] == 'c')
+			switch (format[i])
 			{
-				c = va_arg(args, int);
-				count += write(1, &c, 1);
-			}
-			if (format[i] == 's')
-			{
-				ptr = va_arg(args, char*);
-				length = 0;
-				while (*ptr != '\0')
+				case 'c':
 				{
-					length++;
-					ptr++;
+					c = va_arg(args, int);
+					count += write(1, &c, 1);
+					break;
 				}
-				p = malloc((length + 1) * sizeof(char));
-				for (j = 0; j < (length + 1); j++)
+				case 's':
 				{
-					p[length - j] = *(ptr - j);
+					length = 0;
+					ptr = va_arg(args, char*);
+					while (*ptr != '\0')
+					{
+						length++;
+						ptr++;
+					}
+					p = malloc((length + 1) * sizeof(char));
+					for (j = 0; j < (length + 1); j++)
+					{
+						p[length - j] = *(ptr - j);
+					}
+					count += write(1, p, length);
+					free(p);
+					p = NULL;
+					break;
 				}
-				count += write(1, p, length);
-				free(p);
-				p = NULL;
-		/**		size_t length;
-				for (length = 0; ptr[length]; length++) 
+				case '%':
+					count += write(1, &format[i], 1);
+					break;
+				case 'd':
+				case 'i':
 				{
-					;
-		  		}
-			 	count += write(1, ptr, length);*/
+					num = va_arg(args, int);
+					k = num;
+					len = 0;
+					while (k >= 1)
+					{				
+						len++;
+						k /= 10;
+					}
+					dig = malloc(len + 1);
+					dig[len] = '\0';
+					for (l = 1; l < len + 1; l++)
+					{
+						dig[len - l] = (num % 10) + '0';
+						num /= 10;
+					}
+					count += write(1, dig, len);
+					free(dig);
+					dig = NULL;
+					break;
+				}
 			}
-		}	
-			if (format[i] == '%')
-				count += write(1, &format[i], 1);
-		else	
-			count += write(1, &format[i], 1);
+		}
+		else
+			count += write( &format[i], 1);
 	}
 	va_end(args);
 	return (count);
