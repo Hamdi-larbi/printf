@@ -15,7 +15,7 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	int num, count = 0;
-	int i, k, length, len;
+	int i, k, length, len, l;
 	char c, *ptr, *dig;
 
 	va_start(args, format);
@@ -46,6 +46,8 @@ int _printf(const char *format, ...)
 			}
 			if (format[i] == '%')
 				count += write(1, &format[i], 1);
+			if (format[i] == '\0')
+				count += write(1, &format[i-1],1);
 			if (format[i] == 'd' || format[i] == 'i')
 			{
 				num = va_arg(args, int);
