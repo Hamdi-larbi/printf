@@ -15,7 +15,7 @@ int _printf(const char *format, ...)
 {
 	va_list args;
 	int num, count = 0;
-	int i, j, k, length, len;
+	int i, j, k, length, len, l;
 	char c, *p, *ptr, *digit, *dig;
 
 	va_start(args, format);
